@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muhammad Makdum Ibrahim | Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { scroll-behavior: smooth; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #fcfcfd; 
+            overflow-x: hidden;
+            margin: 0; padding: 0;
+            min-height: 100vh;
+        }
+        
+        /* Latar Belakang Gradasi Halus */
+        .mesh-gradient-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #fcfcfd;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 58, 138, 0.08) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.08) 0px, transparent 50%);
+            z-index: -2;
+        }
+
+        .blob {
+            position: fixed;
+            width: 500px; height: 500px;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+            filter: blur(80px); border-radius: 50%;
+            z-index: -1; animation: move 20s infinite alternate; pointer-events: none;
+        }
+
+        @keyframes move {
+            from { transform: translate(-10%, -10%) rotate(0deg); }
+            to { transform: translate(20%, 20%) rotate(360deg); }
+        }
+
+        /* Styling Timeline */
+        .timeline-line { width: 2px; background: #e2e8f0; position: absolute; left: 20px; top: 0; bottom: 0; }
+        @media (min-width: 768px) { .timeline-line { left: 50%; transform: translateX(-50%); } }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Animasi Melayang */
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(3deg); }
+            50% { transform: translateY(-20px) rotate(-2deg); }
+        }
+
+        .skill-badge { transition: all 0.3s ease; backdrop-filter: blur(8px); }
+        .skill-badge:hover { transform: scale(1.1) rotate(0deg) !important; background: white; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+
+        /* Menu Mobile */
+        #mobile-menu {
+            transform: translateY(-120%);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            pointer-events: none; opacity: 0;
+        }
+        #mobile-menu.active { transform: translateY(0); pointer-events: auto; opacity: 1; }
+
+        .page-fade-in { animation: fadeIn 0.5s ease forwards; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="text-slate-900">
+
+    <div class="mesh-gradient-bg"></div>
+    <div class="blob top-0 left-0"></div>
+    <div class="blob bottom-0 right-0" style="animation-delay: -5s;"></div>
+
+    <!-- Header / Navbar -->
+    <nav class="fixed w-full z-[100] top-0 transition-all duration-300 px-6 py-4" id="navbar">
+        <div class="max-w-6xl mx-auto relative">
+            <div class="bg-white/70 backdrop-blur-xl border border-white/50 rounded-2xl px-6 py-3 flex items-center justify-between shadow-sm relative z-20">
+                <a href="javascript:void(0)" onclick="navigateTo('home')" class="text-xl font-extrabold bg-gradient-to-r from-blue-950 via-blue-700 to-blue-500 bg-clip-text text-transparent">Makdum</a>
+                
+                <!-- Navigasi Desktop -->
+                <div class="hidden md:flex space-x-8 text-sm font-semibold text-slate-600">
+                    <a href="javascript:void(0)" onclick="navigateTo('home', 'home')" class="hover:text-blue-600 transition">Beranda</a>
+                    <a href="javascript:void(0)" onclick="navigateTo('home', 'experience')" class="hover:text-blue-600 transition">Pengalaman</a>
+                    <a href="javascript:void(0)" onclick="navigateTo('home', 'projects')" class="hover:text-blue-600 transition">Proyek</a>
+                    <a href="javascript:void(0)" onclick="navigateTo('home', 'skills')" class="hover:text-blue-600 transition">Skill</a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <a href="mailto:makdum204@gmail.com" class="hidden sm:block bg-slate-900 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-blue-800 transition-all shadow-lg shadow-blue-900/10 active:scale-95">
+                        Hubungi Saya
+                    </a>
+                    <button id="menu-toggle" class="md:hidden p-2 text-slate-900 hover:bg-slate-100 rounded-xl transition-colors focus:outline-none flex items-center justify-center min-w-[40px]">
+                        <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Menu Mobile Overlay -->
+            <div id="mobile-menu" class="absolute left-0 right-0 top-full mt-2 bg-white/95 backdrop-blur-2xl border border-slate-200 rounded-[2rem] p-6 shadow-2xl md:hidden z-10">
+                <div class="flex flex-col space-y-2 text-center">
+                    <a href="javascript:void(0)" onclick="navigateTo('home', 'home')" class="mobile-link text-lg font-bold text-slate-900 p-4 hover:bg-blue-50 rounded-2xl transition">Beranda</a>
+                    <a href="javascript:void(0)" onclick="navigateTo('home', 'experience')" class="mobile-link text-lg font-bold text-slate-900 p-4 hover:bg-blue-50 rounded-2xl transition">Pengalaman</a>
+                    <a href="javascript:void(0)" onclick="navigateTo('home', 'projects')" class="mobile-link text-lg font-bold text-slate-900 p-4 hover:bg-blue-50 rounded-2xl transition">Proyek</a>
+                    <a href="javascript:void(0)" onclick="navigateTo('home', 'skills')" class="mobile-link text-lg font-bold text-slate-900 p-4 hover:bg-blue-50 rounded-2xl transition">Skill</a>
+                    <hr class="border-slate-100 my-2">
+                    <a href="mailto:makdum204@gmail.com" class="mobile-link bg-blue-900 text-white text-center p-4 rounded-2xl font-bold">Email Saya</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Kontainer Utama -->
+    <div id="page-container" class="relative z-10 pt-24 min-h-screen flex flex-col">
+        
+        <!-- HALAMAN BERANDA -->
+        <div id="view-home" class="page-fade-in flex-grow">
+            <!-- Hero Section -->
+            <section id="home" class="min-h-[85vh] flex items-center px-6">
+                <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                    <div class="lg:col-span-7 space-y-8 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-3 px-4 py-2 bg-white/50 border border-slate-200 rounded-full shadow-sm">
+                            <span class="relative flex h-2 w-2">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                            </span>
+                            <span class="text-xs font-bold text-slate-600 uppercase tracking-widest text-center uppercase">Siap Untuk Kolaborasi</span>
+                        </div>
+                        <h1 class="text-5xl md:text-7xl font-extrabold text-slate-900 leading-[1.1] tracking-tight">
+                            Muhammad <span class="text-blue-600">Makdum</span> Ibrahim.
+                        </h1>
+                        <p class="text-lg md:text-xl text-slate-600 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
+                            Mahasiswa Manajemen <span class="font-bold text-slate-800">Universitas Muhammadiyah Surabaya</span>. Spesialis dalam administrasi sistem dan strategi komunikasi digital.
+                        </p>
+                        <div class="flex flex-wrap justify-center lg:justify-start gap-4 pt-4">
+                            <a href="https://linkedin.com/in/muhammad-makdum-ibrahim" target="_blank" class="px-8 py-4 bg-blue-950 text-white rounded-2xl font-bold hover:bg-blue-800 transition-all shadow-2xl shadow-blue-900/20 flex items-center gap-2">
+                                <i data-lucide="linkedin" class="w-5 h-5"></i> LinkedIn
+                            </a>
+                            <a href="https://instagram.com/makdum.ibr" target="_blank" class="px-8 py-4 bg-white border border-slate-200 rounded-2xl font-bold text-slate-700 hover:bg-slate-50 transition-all flex items-center gap-2">
+                                <i data-lucide="instagram" class="w-5 h-5 text-pink-600"></i> Instagram
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- FOTO PROFIL DENGAN KARTU MELAYANG -->
+                    <div class="lg:col-span-5 flex justify-center relative">
+                        <div class="relative w-72 h-72 md:w-96 md:h-96">
+                            <div class="absolute -top-6 -right-6 z-10 animate-float">
+                                <div class="skill-badge bg-white/80 p-4 rounded-2xl shadow-xl border border-white/50 -rotate-6 flex items-center gap-3">
+                                    <div class="p-2 bg-blue-100 rounded-lg text-blue-600">
+                                        <i data-lucide="layout" class="w-5 h-5"></i>
+                                    </div>
+                                    <span class="font-bold text-sm">Media Officer</span>
+                                </div>
+                            </div>
+                            <div class="absolute -bottom-4 -left-10 z-10 animate-float" style="animation-delay: -2s;">
+                                <div class="skill-badge bg-white/80 p-4 rounded-2xl shadow-xl border border-white/50 rotate-12 flex items-center gap-3">
+                                    <div class="p-2 bg-indigo-100 rounded-lg text-indigo-600">
+                                        <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                                    </div>
+                                    <span class="font-bold text-sm">Admin Expert</span>
+                                </div>
+                            </div>
+                            <div class="w-full h-full bg-slate-200 rounded-[3.5rem] border-[12px] border-white shadow-2xl overflow-hidden relative group">
+                                <img src="Gambar/fotoku/mee.png" 
+                                     alt="Muhammad Makdum Ibrahim" 
+                                     class="w-full h-full object-cover transition duration-700 group-hover:scale-110">
+                                <div class="absolute inset-0 bg-gradient-to-t from-blue-900/20 to-transparent"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bagian Pengalaman -->
+            <section id="experience" class="py-24 px-6 bg-white/40">
+                <div class="max-w-4xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h3 class="text-4xl font-extrabold text-slate-900">Riwayat Pengalaman</h3>
+                        <p class="text-slate-500 mt-2 italic">Perjalanan profesional dan kepemimpinan saya.</p>
+                    </div>
+                    <div class="relative">
+                        <div class="timeline-line"></div>
+                        
+                        <!-- ITEM 1 -->
+                        <div class="reveal relative mb-12 md:flex md:justify-between md:items-center w-full">
+                            <div class="hidden md:block w-5/12 text-right pr-8">
+                                <span class="text-blue-600 font-bold">2025 - Sekarang</span>
+                            </div>
+                            <div class="z-10 absolute left-0 md:left-1/2 md:-translate-x-1/2 w-10 h-10 bg-blue-900 rounded-full border-4 border-white shadow-md flex items-center justify-center">
+                                <i data-lucide="megaphone" class="w-4 h-4 text-white"></i>
+                            </div>
+                            <div class="ml-12 md:ml-0 md:w-5/12 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                                <div class="md:hidden text-blue-600 font-bold text-xs mb-1">2025 - Sekarang</div>
+                                <h4 class="font-bold text-lg text-slate-900">Ketua Bidang Media & Komunikasi</h4>
+                                <p class="text-blue-600 text-sm font-medium">IMM SHIN'NICHI</p>
+                                <p class="text-xs text-slate-400 mt-1 italic">Memimpin strategi branding & tim kreatif digital.</p>
+                            </div>
+                        </div>
+
+                        <!-- ITEM 2 -->
+                        <div class="reveal relative mb-12 md:flex md:flex-row-reverse md:justify-between md:items-center w-full">
+                            <div class="hidden md:block w-5/12 text-left pl-8">
+                                <span class="text-blue-600 font-bold">2025 - Sekarang</span>
+                            </div>
+                            <div class="z-10 absolute left-0 md:left-1/2 md:-translate-x-1/2 w-10 h-10 bg-indigo-600 rounded-full border-4 border-white shadow-md flex items-center justify-center">
+                                <i data-lucide="instagram" class="w-4 h-4 text-white"></i>
+                            </div>
+                            <div class="ml-12 md:ml-0 md:w-5/12 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                                <div class="md:hidden text-blue-600 font-bold text-xs mb-1">2025 - Sekarang</div>
+                                <h4 class="font-bold text-lg text-slate-900">Admin Sosial Media</h4>
+                                <p class="text-indigo-600 text-sm font-medium">Arah Motor</p>
+                                <p class="text-xs text-slate-400 mt-1 italic">Manajemen konten bisnis otomotif.</p>
+                            </div>
+                        </div>
+
+                        <!-- ITEM 3 -->
+                        <div class="reveal relative mb-12 md:flex md:justify-between md:items-center w-full">
+                            <div class="hidden md:block w-5/12 text-right pr-8">
+                                <span class="text-blue-600 font-bold">2022 - 2023</span>
+                            </div>
+                            <div class="z-10 absolute left-0 md:left-1/2 md:-translate-x-1/2 w-10 h-10 bg-slate-800 rounded-full border-4 border-white shadow-md flex items-center justify-center">
+                                <i data-lucide="database" class="w-4 h-4 text-white"></i>
+                            </div>
+                            <div class="ml-12 md:ml-0 md:w-5/12 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                                <div class="md:hidden text-blue-600 font-bold text-xs mb-1">2022 - 2023</div>
+                                <h4 class="font-bold text-lg text-slate-900">Staf Administrasi</h4>
+                                <p class="text-slate-600 text-sm font-medium">SMP Muhammadiyah 21 Laren</p>
+                                <p class="text-xs text-slate-400 mt-1 italic">Pengarsipan dokumen dan pengolahan data sekolah.</p>
+                            </div>
+                        </div>
+
+                        <!-- ITEM 4 -->
+                        <div class="reveal relative mb-12 md:flex md:flex-row-reverse md:justify-between md:items-center w-full">
+                            <div class="hidden md:block w-5/12 text-left pl-8">
+                                <span class="text-blue-600 font-bold">2019 - 2022</span>
+                            </div>
+                            <div class="z-10 absolute left-0 md:left-1/2 md:-translate-x-1/2 w-10 h-10 bg-amber-500 rounded-full border-4 border-white shadow-md flex items-center justify-center">
+                                <i data-lucide="crown" class="w-4 h-4 text-white"></i>
+                            </div>
+                            <div class="ml-12 md:ml-0 md:w-5/12 bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                                <div class="md:hidden text-blue-600 font-bold text-xs mb-1">2019 - 2022</div>
+                                <h4 class="font-bold text-lg text-slate-900">Ketua OSIS / CEO Departemen</h4>
+                                <p class="text-amber-600 text-sm font-medium">SMA Muh. 11 Laren / HIMO Lamongan</p>
+                                <p class="text-xs text-slate-400 mt-1 italic">Kepemimpinan tingkat sekolah dan kabupaten.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Galeri Proyek -->
+            <section id="projects" class="py-24 px-6 bg-slate-50/60">
+                <div class="max-w-6xl mx-auto">
+                    <div class="text-center mb-16">
+                        <h3 class="text-4xl font-extrabold text-slate-900">Hasil Proyek & Kegiatan</h3>
+                        <p class="text-slate-500 mt-4 italic">Klik proyek untuk melihat dokumentasi foto asli dan tautan hasil karya.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="reveal project-card bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" onclick="navigateTo('project', 'ldkm')">
+                            <div class="h-48 bg-blue-100 overflow-hidden relative">
+                                <img src="Gambar/hasil proyek kegiatan/LDKM2.jpg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                <div class="absolute inset-0 bg-blue-900/10"></div>
+                            </div>
+                            <div class="p-6">
+                                <h4 class="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition">LDKM FEB 2024</h4>
+                                <p class="text-slate-500 text-sm mt-2 line-clamp-2">Manajemen acara kepemimpinan mahasiswa tingkat fakultas.</p>
+                            </div>
+                        </div>
+                        <div class="reveal project-card bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" onclick="navigateTo('project', 'umkm')">
+                            <div class="h-48 bg-emerald-100 overflow-hidden relative">
+                                <img src="Gambar/hasil proyek kegiatan/RTL1.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                <div class="absolute inset-0 bg-emerald-900/10"></div>
+                            </div>
+                            <div class="p-6">
+                                <h4 class="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition">Seminar UMKM</h4>
+                                <p class="text-slate-500 text-sm mt-2 line-clamp-2">Pemberdayaan ekonomi kreatif di Desa Sukolilo Baru.</p>
+                            </div>
+                        </div>
+                        <div class="reveal project-card bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm cursor-pointer group" onclick="navigateTo('project', 'wisuda')">
+                            <div class="h-48 bg-indigo-100 overflow-hidden relative">
+                                <img src="Gambar/hasil proyek kegiatan/Staf Administrasi2.jpeg" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                <div class="absolute inset-0 bg-indigo-900/10"></div>
+                            </div>
+                            <div class="p-6">
+                                <h4 class="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition">Sekretaris Wisuda</h4>
+                                <p class="text-slate-500 text-sm mt-2 line-clamp-2">Manajemen administrasi dan logistik kelulusan sekolah.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bagian Skill -->
+            <section id="skills" class="py-24 px-6 bg-slate-900 text-white rounded-[4rem] mx-4 mb-12">
+                <div class="max-w-6xl mx-auto text-center">
+                    <h3 class="text-3xl font-extrabold mb-16">Kemampuan & Kompetensi</h3>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                        <div class="reveal p-6 bg-white/5 border border-white/10 rounded-3xl cursor-pointer hover:bg-white/10 transition group" onclick="navigateTo('skill', 'msoffice')">
+                            <i data-lucide="file-spreadsheet" class="w-8 h-8 text-blue-400 mx-auto mb-4 group-hover:scale-110 transition"></i>
+                            <h4 class="font-bold">MS Office</h4>
+                            <p class="text-[10px] text-slate-400 mt-2 uppercase">Detail & Contoh</p>
+                        </div>
+                        <div class="reveal p-6 bg-white/5 border border-white/10 rounded-3xl cursor-pointer hover:bg-white/10 transition group" onclick="navigateTo('skill', 'creative')">
+                            <i data-lucide="palette" class="w-8 h-8 text-indigo-400 mx-auto mb-4 group-hover:scale-110 transition"></i>
+                            <h4 class="font-bold">Creative Tools</h4>
+                            <p class="text-[10px] text-slate-400 mt-2 uppercase">Detail & Contoh</p>
+                        </div>
+                        <div class="reveal p-6 bg-white/5 border border-white/10 rounded-3xl cursor-pointer hover:bg-white/10 transition group" onclick="navigateTo('skill', 'speaking')">
+                            <i data-lucide="mic" class="w-8 h-8 text-emerald-400 mx-auto mb-4 group-hover:scale-110 transition"></i>
+                            <h4 class="font-bold">Public Speaking</h4>
+                            <p class="text-[10px] text-slate-400 mt-2 uppercase">Detail & Contoh</p>
+                        </div>
+                        <div class="reveal p-6 bg-white/5 border border-white/10 rounded-3xl cursor-pointer hover:bg-white/10 transition group" onclick="navigateTo('skill', 'admin')">
+                            <i data-lucide="archive" class="w-8 h-8 text-amber-400 mx-auto mb-4 group-hover:scale-110 transition"></i>
+                            <h4 class="font-bold">Administrasi</h4>
+                            <p class="text-[10px] text-slate-400 mt-2 uppercase">Detail & Contoh</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bagian Kontak -->
+            <section id="contact" class="py-16 px-6 text-center">
+                <div class="max-w-2xl mx-auto">
+                    <h2 class="text-4xl font-extrabold text-slate-900 mb-12">Siap Berkolaborasi?</h2>
+                    <div class="flex flex-col sm:flex-row justify-center gap-6">
+                        <a href="https://wa.me/6285791633308" target="_blank" class="px-10 py-5 bg-green-600 text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-green-700 transition shadow-xl shadow-green-600/20 active:scale-95">
+                            <i data-lucide="phone" class="w-5 h-5"></i> WhatsApp
+                        </a>
+                        <a href="mailto:makdum204@gmail.com" class="px-10 py-5 bg-blue-900 text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-blue-800 transition shadow-xl shadow-blue-900/20 active:scale-95">
+                            <i data-lucide="mail" class="w-5 h-5"></i> Email Saya
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- TAMPILAN DETAIL -->
+        <div id="view-detail" class="hidden page-fade-in px-6 flex-grow">
+            <div class="max-w-5xl mx-auto bg-white border border-slate-200 rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-blue-900/5 min-h-[70vh] flex flex-col relative">
+                <button onclick="navigateTo('home')" class="inline-flex items-center gap-2 text-blue-600 font-bold mb-8 hover:bg-blue-50 px-4 py-2 rounded-xl transition w-fit z-20">
+                    <i data-lucide="arrow-left" class="w-5 h-5"></i> Kembali
+                </button>
+                <div id="detail-content" class="flex-grow"></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="pt-6 pb-8 border-t border-slate-100 text-center text-slate-400 text-sm w-full bg-white/50 backdrop-blur-md">
+            <p>&copy; 2024 Muhammad Makdum Ibrahim. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Data Lengkap Konten dari CV
+        const dataContent = {
+            project: {
+                ldkm: {
+                    title: "Latihan Dasar Kepemimpinan Mahasiswa (LDKM) FEB",
+                    role: "Koordinator Acara",
+                    date: "Agustus - 24 November 2024",
+                    desc: "Merancang dan mengelola keseluruhan rangkaian acara pelatihan kepemimpinan untuk mahasiswa tingkat fakultas Universitas Muhammadiyah Surabaya.",
+                    results: ["Mengkoordinasi tim & narasumber.", "Laporan evaluasi komprehensif.", "Tepat waktu 100%."],
+                    images: ["Gambar/hasil proyek kegiatan/LDKM1.jpg"],
+                    links: [{ label: "Detail Acara (IG)", url: "https://www.instagram.com/ldkmfeb_umsurabaya/", icon: "instagram" }]
+                },
+                umkm: {
+                    title: "Seminar & Pendampingan UMKM Desa Sukolilo Baru",
+                    role: "Ketua Pelaksana",
+                    date: "14 Maret - 21 Juli 2024",
+                    desc: "Program pengabdian masyarakat untuk peningkatan kapasitas manajerial dan digital UMKM lokal.",
+                    results: ["Relasi strategis mitra.", "Pendampingan pelaku usaha.", "Peningkatan skill digital marketing."],
+                    images: ["Gambar/hasil proyek kegiatan/RTL2.jpeg"],
+                    links: [{ label: "Profil Proyek", url: "https://www.instagram.com/rtl_immshinnichi/", icon: "instagram" }]
+                },
+                wisuda: {
+                    title: "Sekretaris Wisuda SMP Muhammadiyah 21 Laren",
+                    role: "Sekretaris Acara",
+                    date: "10 - 23 Juni 2023",
+                    desc: "Mengelola administrasi dan logistik untuk acara kelulusan siswa sekolah.",
+                    results: ["Penyusunan dokumen resmi.", "Manajemen logistik wali murid.", "Kelancaran dokumentasi acara."],
+                    images: ["Gambar/hasil proyek kegiatan/Staf Administrasi1.jpeg"],
+                    links: [{ label: "Profil Proyek", url: "https://www.instagram.com/smpmudasat_laren/", icon: "instagram" }]
+                }
+            },
+            skill: {
+                msoffice: {
+                    title: "Microsoft Office Suite",
+                    role: "Professional Admin",
+                    date: "Keahlian Utama",
+                    desc: "Penggunaan tingkat mahir untuk pengolahan data dan penyusunan laporan resmi.",
+                    results: ["Administrasi sekolah (Word).", "Data siswa (Excel).", "Presentasi (PPT)."],
+                    images: ["https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop"], links: []
+                },
+                creative: {
+                    title: "Creative Tools (Branding)",
+                    role: "Creative Specialist",
+                    date: "Visual & Content",
+                    desc: "Produksi konten visual untuk kebutuhan branding bisnis dan organisasi.",
+                    results: ["Feed Arah Motor.", "Konten digital IMM.", "Canva & Capcut expert."],
+                    images: ["Gambar/kemampuan dan kompetensi/Sosmed IMM.jpeg"], links: []
+                },
+                speaking: {
+                    title: "Public Speaking & Leadership",
+                    role: "Komunikator Strategis",
+                    date: "Soft Skills",
+                    desc: "Kemampuan memimpin tim besar dan berbicara di depan publik.",
+                    results: ["Ketua OSIS SMA.", "CEO HIMO Lamongan.", "Negosiasi instansi."],
+                    images: ["Gambar/kemampuan dan kompetensi/PublicS.JPG"], links: []
+                },
+                admin: {
+                    title: "Administrasi & Pengarsipan",
+                    role: "Admin Specialist",
+                    date: "Operational Skills",
+                    desc: "Sistem pengelolaan dokumen dan pengarsipan digital.",
+                    results: ["Arsip SMPM 21.", "Data digital sistem.", "Ketelitian tinggi."],
+                    images: ["https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=1000&auto=format&fit=crop"], links: []
+                }
+            }
+        };
+
+        const homeView = document.getElementById('view-home');
+        const detailView = document.getElementById('view-detail');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuToggle = document.getElementById('menu-toggle');
+
+        function navigateTo(view, targetId = null) {
+            closeMobileMenu();
+
+            if (view === 'home') {
+                homeView.classList.remove('hidden');
+                detailView.classList.add('hidden');
+                
+                if (targetId) {
+                    setTimeout(() => {
+                        const target = document.getElementById(targetId);
+                        if (target) {
+                            const offset = 100;
+                            const elementPosition = target.getBoundingClientRect().top + window.pageYOffset;
+                            window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
+                        }
+                    }, 50);
+                } else {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            } else {
+                const data = dataContent[view][targetId];
+                const content = document.getElementById('detail-content');
+                
+                content.innerHTML = `
+                    <div class="mb-10 animate-fade-in">
+                        <span class="text-blue-600 font-bold uppercase tracking-widest text-xs">${data.date}</span>
+                        <h2 class="text-3xl md:text-5xl font-extrabold text-slate-900 mt-2">${data.title}</h2>
+                        <div class="mt-4 px-6 py-2 bg-blue-50 text-blue-700 rounded-2xl font-bold border border-blue-100 w-fit">Fokus: ${data.role}</div>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                        <div class="space-y-8">
+                            <div>
+                                <h4 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><i data-lucide="info" class="w-6 h-6 text-blue-600"></i> Ringkasan</h4>
+                                <p class="text-lg text-slate-600 leading-relaxed">${data.desc}</p>
+                            </div>
+                            <div>
+                                <h4 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><i data-lucide="award" class="w-6 h-6 text-blue-600"></i> Poin Kontribusi</h4>
+                                <ul class="space-y-4">
+                                    ${data.results.map(res => `
+                                        <li class="p-5 bg-slate-50 border border-slate-100 rounded-2xl flex items-start gap-4">
+                                            <i data-lucide="check-circle" class="w-5 h-5 text-green-500 mt-1 shrink-0"></i>
+                                            <p class="text-slate-700 font-medium">${res}</p>
+                                        </li>
+                                    `).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="space-y-8">
+                            ${data.images.length > 0 ? `<div><h4 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><i data-lucide="image" class="w-6 h-6 text-blue-600"></i> Dokumentasi</h4><div class="grid grid-cols-1 gap-4">${data.images.map(img => `<div class="rounded-3xl overflow-hidden border border-slate-100 shadow-lg"><img src="${img}" class="w-full h-auto object-cover hover:scale-105 transition duration-700"></div>`).join('')}</div></div>` : ''}
+                            ${data.links && data.links.length > 0 ? `<div><h4 class="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2"><i data-lucide="external-link" class="w-6 h-6 text-blue-600"></i> Tautan</h4><div class="flex flex-col gap-3">${data.links.map(link => `<a href="${link.url}" target="_blank" class="flex items-center justify-between p-5 bg-white border border-slate-200 rounded-2xl hover:border-blue-400 hover:shadow-xl transition group"><div class="flex items-center gap-3"><i data-lucide="${link.icon}" class="w-5 h-5 text-slate-400"></i><span class="font-bold text-slate-700">${link.label}</span></div><i data-lucide="chevron-right" class="w-4 h-4 text-slate-300"></i></a>`).join('')}</div></div>` : ''}
+                        </div>
+                    </div>
+                `;
+                homeView.classList.add('hidden');
+                detailView.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                lucide.createIcons();
+            }
+        }
+
+        // Logika Hamburger Menu
+        function updateMenuIcon(isOpen) {
+            menuToggle.innerHTML = isOpen 
+                ? '<i data-lucide="x" class="w-6 h-6"></i>' 
+                : '<i data-lucide="menu" class="w-6 h-6"></i>';
+            lucide.createIcons();
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('active');
+            updateMenuIcon(false);
+        }
+
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isActive = mobileMenu.classList.toggle('active');
+            updateMenuIcon(isActive);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (mobileMenu.classList.contains('active') && !mobileMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                closeMobileMenu();
+            }
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) nav.classList.add('shadow-md');
+            else nav.classList.remove('shadow-md');
+        });
+    </script>
+</body>
+</html>
